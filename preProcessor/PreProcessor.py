@@ -8,6 +8,7 @@ from pyspark.ml.feature import VectorAssembler
 
 class PreProcessor():
     nofealist = cols_non_feature_info
+    valid_feature = cols_feature_all
 
     @classmethod
     def transColType(cls, df: 'sparkdf', missing: 'Double')-> 'sparkdf':
@@ -26,6 +27,12 @@ class PreProcessor():
     def filterDt(cls, df: 'sparkdf', begin: 'string', end: 'string')-> 'sparkdf':
         sel_rows = (col("dt")>=begin) & (col("dt")<=end)
         res = df.filter(sel_rows)
+        return res
+
+
+    @staticmethod
+    def selectFeature(df):
+        res = df.select(*PreProcessor.valid_feature)
         return res
 
 
