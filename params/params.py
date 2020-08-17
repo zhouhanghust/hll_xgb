@@ -1,38 +1,17 @@
 # encoding=utf-8
+import configparser
+import pandas as pd
 
-xgboost: {
-      eta: 0.05,
-      max_depth: 3,
-      gamma: 0.0,
-      lambda: 1.0,
-      alpha: 0.0,
-      colsample_bylevel: 1,
-      objective: "binary:logistic",
-      min_child_weight: 90,
-      booster: "gbtree",
-      subsample: 0.8,
-      nworkers: 100,
-      eval_metric: "auc",
-      num_round: 50,
-      numEarlyStoppingRounds: 50,
-      use_external_memory: true,
-      trainTestRatio: 0.8,
-      scale_pos_weight: 1.0,
-      colsample_bytree: 1.0,
-      missing: -999.0
-}
+config = configparser.ConfigParser()
+config.read("./config.ini",'utf-8')
 
-train: {
-      train_path: "/user/lixuhang/feature",
-      test_path: "/user/lixuhang/feature",
-      whitelist_path: "", #白名单-入模特征
-      hdfs_model_path: "/user/lixuhang/CV.model",  #hdfs模型存储路径
-      local_model_path: "CV.model",  #本地模型存储路径
-      local_model_feature_path: "CV_fealist", #本地模型特征存储路径
-      local_model_feature_weights_path: "CV_weight.im",  #特征重要性文件本地存储路径
-      local_quantiles_path: "CV_local_src_quantiles.txt",  #训练集模型score分位点
-      train_res_path: "/user/lixuhang/CV_train_res",  #训练数据预测结果 四元组+label+score
-      test_res_path: "/user/lixuhang/CV_test_res",  #测试数据预测结果 四元组+label+score
-  #      key: "name+idcard+phone+loan_dt+label"
-      cv_num: 5
-}
+XGB_param = dict(config.items("XGBOOST"))
+Train_param = dict(config.items("TRAIN"))
+
+whitelist = pd.read_csv(Train_param['whitelist_path'], header=None, names['features'])
+whitelist = whitelist['features'].values.tolist()
+whitelist = [fea.strip() for fea in whitelist]
+
+cols_non_feature_info = ['order_id', 'ab_order', 'driver_id', 'user_id', 'dt', 'label']
+
+
