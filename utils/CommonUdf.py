@@ -3,7 +3,8 @@ from pyspark.sql.functions import udf
 from pyspark.sql.types import DoubleType, IntegerType
 
 
-class CommonUdf():
+
+class UdfTool():
 
     @staticmethod
     def String2Double():
@@ -31,3 +32,6 @@ class CommonUdf():
 
 
 
+class CommonUdf():
+    String2Double = UdfTool.String2Double()
+    String2Int = UdfTool.String2Int()

@@ -16,7 +16,7 @@ class PreProcessor():
         for colType in all_df.schema:
             if colType.name not in cls.nofealist:
                 if isinstance(colType.dataType, StringType):
-                    all_df = all_df.withColumn(colType.name, CommonUdf.String2Double()(col(colType.name)))
+                    all_df = all_df.withColumn(colType.name, CommonUdf.String2Double(col(colType.name)))
                     print("transform String2Double col"+colType.name+"^______^")
 
         all_df_fillna = all_df.na.fill(missing) # 可以指定subset进行填充，df.na.fill(missing,subset=['order_id','driver_id'])

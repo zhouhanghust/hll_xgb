@@ -3,10 +3,11 @@
 import numpy as np
 import math
 
-NUMERIC_PATTERN = re.compile(r'^-?(0\.?|[1-9]\d*.\d*$|0\.\d*[1-9]\d*$)|^\.\d*[1-9]\d*$|^-?[1-9]\d*$')
+
 
 class CalcTools():
     NUMERIC_PATTERN = re.compile(r'^-?(0\.?|[1-9]\d*.\d*$|0\.\d*[1-9]\d*$)|^\.\d*[1-9]\d*$|^-?[1-9]\d*$')
+    DEFAULT_NAN = ['', '\N', '$N', 'NULL', 'null', None]
 
     @staticmethod
     def get_cut_pos(cut_num, vec, head_pos, tail_pos):
@@ -41,7 +42,7 @@ class CalcTools():
 
         hit_index = ~np.isnan(feature_value)  # 判空
         if length_all != sample_num:
-            print feature_name
+            print(feature_name)
             return {}
         feature_value = np.array(feature_value)
         feature_label = np.array(feature_label)
@@ -262,7 +263,7 @@ class CalcTools():
         data1_length = len(data1)
         data2_length = len(data2)
         if (data1_length + data2_length != sample_num) or data1_length * data2_length == 0:
-            print feature_name
+            print(feature_name)
             return {}
         data1_hit_index = ~np.isnan(data1)
         data2_hit_index = ~np.isnan(data2)
