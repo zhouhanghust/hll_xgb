@@ -9,8 +9,9 @@ class SavaTools():
                 f.write(col+"\n")
 
     @staticmethod
-    def saveHdfsFile(df: 'sparkdf', res_path: 'String'):
+    def saveHdfsFile(df: 'sparkdf', res_path: 'String', num_partition=200):
         df \
+            .repartition(num_partition) \
             .write \
             .format("csv") \
             .option("delimiter", "\t") \
