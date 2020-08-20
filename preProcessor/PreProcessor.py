@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-from hll_xgb.config import cols_feature_all, cols_non_feature_info
+from params.params import whitelist, cols_non_feature_info
 from pyspark.sql.types import StringType
 from pyspark.sql.functions import col
 from hll_xgb.utils.CommonUdf import CommonUdf
@@ -8,7 +8,7 @@ from pyspark.ml.feature import VectorAssembler
 
 class PreProcessor():
     nofealist = cols_non_feature_info
-    valid_feature = cols_feature_all
+    valid_feature = whitelist
 
     @classmethod
     def transColType(cls, df: 'sparkdf', missing: 'Double')-> 'sparkdf':

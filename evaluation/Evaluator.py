@@ -1,13 +1,18 @@
 # -*- coding: UTF-8 -*-
-from hll_xgb.dataAnalyzer.run_ks_psi import Run_ks_psi
+from dataAnalyzer.run_ks_psi import Run_ks_psi
 from pyspark.sql.functions import udf,col
 from pyspark.sql.types import IntegerType
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
 from pyspark.ml.feature import QuantileDiscretizer
+from params.params import whitelist,ks_detail_out_path, ks_summary_out_path
+
 
 class Evaluator():
     def __init__(self, spark: 'SparkSession'):
         self._spark = spark
+        self.whitelist = whitelist
+        self.ks_detail_out_path = ks_detail_out_path
+        self.ks_summary_out_path = ks_summary_out_path
 
 
     def evaluateConfusionMatrix(self, df: 'sparkdf'):
@@ -32,11 +37,12 @@ class Evaluator():
         auc = evaluator.evaluate(df)
         return auc
 
-    # 用于计算特征的ks todo 增加计算指定特征ks
-    def evaluateKsCustomized(self, predictions: 'sparkdf', prob ="score"):
-        ks_info = Run_ks_psi.getKsInfo(predictions, prob, 10, 3)
-        ks_detail = ks_info['ks_detail']
-        # todo 增加printKs功能
+    # 用于计算特征的ks
+    def evaluateKsCustomized(self, predictions: 'sparkdf', prob ="score", calc_specific=whitelist, ks_detail_out_path=ks_detail_out_path,ks_summary_out_path=ks_summary_out_path):
+        Run_ks_psi.getKsInfo(predictions, prob, 10, 3, calc_specific,ks_detail_out_path,ks_summary_out_path)
+
+
+
 
 
     # 计算模型分的ks
@@ -78,7 +84,7 @@ class Evaluator():
             cum_good_arr.append(cum_good)
 
         ks = 0.0
-        result.append("seq   评分区间    订单数  逾期数  正常用户数    百分比  逾期率  累计坏账户占比  累计好账户占比  KS统计量")
+        result.append("seq\t评分区间\t订单数\t逾期数\t正常用户数\t百分比\t逾期率\t累计坏账户占比\t累计好账户占比\tKS统计量")
         seq = 0
         length = len(cum_good_arr)
         for row in resultLocal:
