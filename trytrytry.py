@@ -11,10 +11,10 @@ os.environ['SPARK_HOME'] = '/usr/hdp/current/spark2-client'
 # 添加pyspark包路径
 sys.path.append('/usr/hdp/current/spark2-client/python')
 sys.path.append('/usr/hdp/current/spark2-client/python/lib/py4j-0.10.7-src.zip')
-# # 添加sparkxgb包路径
-# sys.path.append('/data/zhouhang/sparkxgb_all')
-# sys.path.append('/data/zhouhang/sparkxgb_all/xgboost4j-spark-0.72.jar')
-# sys.path.append('/data/zhouhang/sparkxgb_all/xgboost4j-0.72.jar')
+# 添加sparkxgb包路径
+sys.path.append('/data/zhouhang/sparkxgb_all')
+sys.path.append('/data/zhouhang/sparkxgb_all/xgboost4j-spark-0.72.jar')
+sys.path.append('/data/zhouhang/sparkxgb_all/xgboost4j-0.72.jar')
 
 
 from dataAnalyzer.utils.SparkEnv import SparkEnv
@@ -56,7 +56,7 @@ SQL0 = """
 # print(df.show(10))
 
 df = spark.sql("select * from temp.zh_samples limit 2000")
-
+print(df.show(10))
 # 模型使用特征
 cols_feature = [
     #### order & context

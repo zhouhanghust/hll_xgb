@@ -42,7 +42,7 @@ class PreProcessor():
         for colType in df.schema:
             if colType.name not in cls.nofealist:
                 usefealist.append(colType.name)
-
+        usefealist = [fea for fea in usefealist if fea in cls.valid_feature]
         print("入模特征数："+str(len(usefealist)))
 
         assembler = VectorAssembler(inputCols=usefealist, outputCol=vec_col_name)
