@@ -52,7 +52,7 @@ class CrossValidationKs():
 
     def KFold(self, arr_df):
         train_df = self.spark.emptyDataFrame
-        validation_df = self.spark.emptyDataFrame
+        validation_df = self.spark.createDataFrame(self.spark.sparkContext.emptyRDD(), arr_df[0].schema)
         kfold_res = []
         for i in range(len(arr_df)):
             validation_df = arr_df[i]
