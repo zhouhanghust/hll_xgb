@@ -32,8 +32,8 @@ class Evaluator():
         return TP, FP, TN, FN, pos_precision, pos_recall
 
 
-    def evaluateAuc(self, df: 'sparkdf'):
-        evaluator = BinaryClassificationEvaluator(rawPredictionCol="score", labelCol="label", metricName="areaUnderROC")
+    def evaluateAuc(self, df: 'sparkdf',rawPredictionCol="score", labelCol="label"):
+        evaluator = BinaryClassificationEvaluator(rawPredictionCol=rawPredictionCol, labelCol=labelCol, metricName="areaUnderROC")
         auc = evaluator.evaluate(df)
         return auc
 
@@ -46,9 +46,9 @@ class Evaluator():
 
 
     # 计算模型分的ks
-    def evaluateKs(self, predictions: 'sparkdf', spark:'sparksession', tableName:'string', prob:'string' = "core")->'double':
+    def evaluateKs(self, predictions: 'sparkdf', tableName:'string', prob:'string' = "core")->'double':
         predictions.createOrReplaceTemView(tableName)
-        result = spark.sql("SELECT score as prob, label FROM %s"%tableName)
+        result = self.spark.sql("SELECT score as prob, label FROM %s"%tableName)
         viewName = tableName + "_result"
         result.createOrReplaceTemView(viewName)
         quantileDiscretizer = QuantileDiscretizer(numBuckets=10, inputCol='prob',outputCol='prob_cut')

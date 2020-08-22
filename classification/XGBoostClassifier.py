@@ -49,7 +49,7 @@ class XGBoostClassifier():
     # 预测并评估auc
     def predict(self,spark,tmp,xgb):
         data = PreProcessor.transVector(tmp, 'features')
-        predictions = xgb.transform(data,-999).map(lambda row: (row['predictions'][1],row['label']))
+        predictions = xgb.predict(data,-999).map(lambda row: (row['predictions'][1],row['label']))
         predictions = predictions.toDF("score","label")
         right = predictions.withColumn("idx", monotonically_increasing_id())
         left = tmp.select(['name','idcard','phone']).withColumn("idx",monotonically_increasing_id())
@@ -65,7 +65,7 @@ class XGBoostClassifier():
     # 限制树的棵树并预测和评估AUC，若limit=-1表示使用全部棵树
     def predictTreeLimit(self, spark, tmp, xgbModel, treelimit=-1):
         data = PreProcessor.transVector(tmp, 'features')
-        predictions = xgbModel.transform(data, -999, treelimit).map(lambda row: (row['predictions'][1],row['label']))
+        predictions = xgbModel.predictTreeLimit(data, -999, treelimit).map(lambda row: (row['predictions'][1],row['label']))
         predictions = predictions.toDF("score", "label")
         right = predictions.withColumn("idx", monotonically_increasing_id())
         left = tmp.select(['name','idcard','phone']).withColumn("idx",monotonically_increasing_id())
