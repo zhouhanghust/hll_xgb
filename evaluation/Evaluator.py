@@ -47,7 +47,7 @@ class Evaluator():
 
     # 计算模型分的ks
     def evaluateKs(self, predictions: 'sparkdf', tableName:'string', prob:'string' = "core")->'double':
-        predictions.createOrReplaceTemView(tableName)
+        predictions.createOrReplaceTempView(tableName)
         result = self.spark.sql("SELECT score as prob, label FROM %s"%tableName)
         viewName = tableName + "_result"
         result.createOrReplaceTemView(viewName)

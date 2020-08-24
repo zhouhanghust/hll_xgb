@@ -23,11 +23,13 @@ class SparkEnv():
         .enableHiveSupport() \
         .getOrCreate()
 
-
+    _count = 0
 
     @classmethod
     def getSession(cls):
-        cls._spark.sparkContext.addPyFile('hdfs:///user/yuan.shi/spark/py/sparkxgb.zip')
+        if not cls._count:
+            cls._spark.sparkContext.addPyFile('hdfs:///user/yuan.shi/spark/py/sparkxgb.zip')
+            cls._count += 1
         return cls._spark
 
 
