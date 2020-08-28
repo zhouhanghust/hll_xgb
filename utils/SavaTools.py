@@ -11,7 +11,7 @@ class SavaTools():
     @staticmethod
     def saveHdfsFile(df: 'sparkdf', res_path: 'String', num_partition=200):
         df \
-            .repartition(num_partition) \
+            .repartition(num_partition) \ # 这里还可以指定列，.repartition(num_partition,"col1")
             .write \
             .format("csv") \
             .option("delimiter", "\t") \
@@ -20,7 +20,15 @@ class SavaTools():
             .csv(res_path)
 
 
-
+        df \
+            .repartition(num_partition) \ # 这里还可以指定列，.repartition(num_partition,"col1")
+            .write \
+            .mode("overwrite") \
+            .partitionBy('col1') \ # 按照分区来存
+            .format("csv") \
+            .option("delimiter", "\t") \
+            .option("header", "true") \
+            .csv(res_path)
 
 
 
